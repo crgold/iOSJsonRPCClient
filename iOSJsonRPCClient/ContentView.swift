@@ -8,7 +8,11 @@
 import SwiftUI
 
 struct Locations: Codable {
-    let result: [String]
+    var result: [String]
+    
+    init?(result: [String]) {
+        self.result = result
+    }
 }
 
 struct LocationDetail: View {
@@ -46,10 +50,10 @@ class ViewModel: ObservableObject {
             
             do {
                 let locations = try JSONDecoder().decode(Locations.self, from: data)
-                print(locations)
                 DispatchQueue.main.async {
+                    
                     self?.locations = locations
-                    print(self!.locations)
+                    print(self!.locations!.result)
                 }
             }
             catch {
@@ -61,20 +65,20 @@ class ViewModel: ObservableObject {
 }
 
 struct ContentView: View {
-    var viewModel = ViewModel()
+    @ObservedObject var viewModel = ViewModel()
     
     var body: some View {
+        
         VStack {
             NavigationView {
                 List {
-                    ForEach(viewModel.locations!.result, id: \.self) { name in
+                    ForEach(viewModel.locations?.result ?? [""], id: \.self) { name in
                         NavigationLink(name, destination: LocationDetail(text: name))
                     }
                 }
                 .navigationBarTitle("Locations")
                 .onAppear {
                     self.viewModel.fetch()
-                    
                 }
             }
             Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/) {
