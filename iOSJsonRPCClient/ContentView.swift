@@ -27,7 +27,7 @@ struct LocationDetail: View {
 class ViewModel: ObservableObject {
     @Published var locations: Locations?
     
-    func fetch() {
+    func getNames() {
         guard let url = URL(string: "http://127.0.0.1:8080") else {
             return
         }
@@ -53,7 +53,6 @@ class ViewModel: ObservableObject {
                 DispatchQueue.main.async {
                     
                     self?.locations = locations
-                    print(self!.locations!.result)
                 }
             }
             catch {
@@ -78,7 +77,7 @@ struct ContentView: View {
                 }
                 .navigationBarTitle("Locations")
                 .onAppear {
-                    self.viewModel.fetch()
+                    self.viewModel.getNames()
                 }
             }
             Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/) {
