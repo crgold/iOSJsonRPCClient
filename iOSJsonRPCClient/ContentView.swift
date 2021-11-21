@@ -68,7 +68,6 @@ class ViewModel: ObservableObject {
             do {
                 let locations = try JSONDecoder().decode(Locations.self, from: data)
                 DispatchQueue.main.async {
-                    
                     self?.locations = locations
                 }
             }
@@ -115,7 +114,11 @@ class ViewModel: ObservableObject {
     }}
 
 struct LocationDetail: View {
+    
+    var location: [String: String] = [:]
+    
     var text: String
+    var viewModel: ViewModel
     
     
     
@@ -135,7 +138,7 @@ struct ContentView: View {
             NavigationView {
                 List {
                     ForEach(viewModel.locations?.result ?? [""], id: \.self) { name in
-                        NavigationLink(name, destination: LocationDetail(text: name))
+                        NavigationLink(name, destination: LocationDetail(text: name, viewModel: self.viewModel))
                     }
                     .onDelete(perform: delete)
                 }
