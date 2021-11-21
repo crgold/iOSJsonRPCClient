@@ -16,15 +16,15 @@ struct Locations: Codable {
 }
 
 struct Details: Codable {
-    var elevation: Float
+    var elevation: Float = 0.0
     var image: String
-    var latitude: Float
+    var latitude: Float = 0.0
     var name: String
     var addressTitle: String
-    var decription: String
+    var description: String
     var addressStreet: String
     var category: String
-    var longitude: Float
+    var longitude: Float = 0.0
 }
 
 struct LocationDetails: Codable {
@@ -56,40 +56,6 @@ class ViewModel: ObservableObject {
         request.httpBody = try? JSONSerialization.data(withJSONObject: json)
         let task = URLSession.shared.dataTask(with: request as URLRequest) { data, _, error in guard let _ = data, error == nil else {
             return
-            }
-        }
-        task.resume()
-    }
-    
-    func getNames() {
-        guard let url = URL(string: "http://127.0.0.1:8080") else {
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        let json: [String: Any] = [
-            "jsonrpc": "2.0",
-            "method" : "getNames",
-            "params" : [],
-            "id": 3
-        ]
-        
-        request.httpMethod = "POST"
-        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.setValue("application/json", forHTTPHeaderField: "Accept")
-        request.httpBody = try? JSONSerialization.data(withJSONObject: json)
-        let task = URLSession.shared.dataTask(with: request as URLRequest) { [weak self] data, _, error in guard let data = data, error == nil else {
-            return
-            }
-            
-            do {
-                let locations = try JSONDecoder().decode(Locations.self, from: data)
-                DispatchQueue.main.async {
-                    self?.locations = locations
-                }
-            }
-            catch {
-                print(error)
             }
         }
         task.resume()
@@ -127,15 +93,65 @@ class ViewModel: ObservableObject {
             }
         }
         task.resume()
-    }}
+    }
+
+    func getNames() {
+        guard let url = URL(string: "http://127.0.0.1:8080") else {
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        let json: [String: Any] = [
+            "jsonrpc": "2.0",
+            "method" : "getNames",
+            "params" : [],
+            "id": 3
+        ]
+        
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.httpBody = try? JSONSerialization.data(withJSONObject: json)
+        let task = URLSession.shared.dataTask(with: request as URLRequest) { [weak self] data, _, error in guard let data = data, error == nil else {
+            return
+            }
+            
+            do {
+                let locations = try JSONDecoder().decode(Locations.self, from: data)
+                DispatchQueue.main.async {
+                    self?.locations = locations
+                }
+            }
+            catch {
+                print(error)
+            }
+        }
+        task.resume()
+    }
+}
 
 struct LocationDetail: View {
     var location: String
+    var tempFloat: Float = 0.0
+    @ObservedObject var viewModel = ViewModel()
     
     var body: some View {
         VStack {
-            Text(location)
+            List{
+                Text("Image Value: " + (viewModel.locationDetails?.result.image ?? "") ?? "")
+                Text(viewModel.locationDetails?.result.name ?? "")
+                Text(viewModel.locationDetails?.result.addressTitle ?? "")
+                Text(viewModel.locationDetails?.result.description ?? "")
+                Text(viewModel.locationDetails?.result.addressStreet ?? "")
+                Text(viewModel.locationDetails?.result.category ?? "")
+                Text("Elevation: \(viewModel.locationDetails?.result.elevation ?? tempFloat)")
+                Text("Latitude: \(viewModel.locationDetails?.result.latitude ?? tempFloat)")
+                Text("Longitude: \(viewModel.locationDetails?.result.longitude ?? tempFloat)")
+            }
+        }
                 .navigationBarTitle(location.description.uppercased())
+        .onAppear {
+            self.viewModel.getDetails(location: self.location)
         }
     }
 }
