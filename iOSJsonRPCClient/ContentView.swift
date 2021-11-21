@@ -38,10 +38,17 @@ class ViewModel: ObservableObject {
         }
         
         var request = URLRequest(url: url)
+        let json: [String: Any] = [
+            "jsonrpc": "2.0",
+            "method" : "getNames",
+            "params" : [],
+            "id": 3
+        ]
+        
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.setValue("application/json", forHTTPHeaderField: "Accept")
-        
+        request.httpBody = try? JSONSerialization.data(withJSONObject: json)
         let task = URLSession.shared.dataTask(with: request as URLRequest) { [weak self] data, _, error in guard let data = data, error == nil else {
             return
             }
@@ -71,13 +78,13 @@ struct ContentView: View {
                     ForEach(viewModel.locations, id: \.self) { location in
                         NavigationLink(location.name, destination: LocationDetail(text: location.name))
                     }
-                    .navigationBarTitle("Locations")
-                        .onAppear {
-                            self.viewModel.fetch()
-                    }
+                }
+                .navigationBarTitle("Locations")
+                .onAppear {
+                    self.viewModel.fetch()
+                    
                 }
             }
-            
             Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/) {
                 Text("Add Location")
             }
