@@ -40,8 +40,6 @@ class ViewModel: ObservableObject {
             return
         }
         
-        print(locations!.result[index])
-        
         var request = URLRequest(url: url)
         let json: [String: Any] = [
             "jsonrpc": "2.0",
@@ -61,9 +59,41 @@ class ViewModel: ObservableObject {
         task.resume()
     }
     
-    func addLocation() {
+    func addLocation(addressTitle: String, addressStreet: String, elevation: Float, image: String, lat: Float, lng: Float, name: String, desc: String, cat: String) {
+        let json = {
+            "address-title": addressTitle,
+            "address-street": addressStreet,
+            "elevation": elevation,
+            "image": image,
+            "latitude": lat,
+            "longitude" : lng,
+            "name": name,
+            "description": desc,
+            "category": cat
+        }
         
-    }
+        guard let url = URL(string: "http://127.0.0.1:8080") else {
+                return
+            }
+            
+            var request = URLRequest(url: url)
+            let json: [String: Any] = [
+                "jsonrpc": "2.0",
+                "method" : "add",
+                "params" : [json],
+                "id": 3
+            ]
+            
+            request.httpMethod = "POST"
+            request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            request.setValue("application/json", forHTTPHeaderField: "Accept")
+            request.httpBody = try? JSONSerialization.data(withJSONObject: json)
+            let task = URLSession.shared.dataTask(with: request as URLRequest) { data, _, error in guard let _ = data, error == nil else {
+                return
+                }
+            }
+            task.resume()
+        }    }
     
     func getDetails(location: String) {
         guard let url = URL(string: "http://127.0.0.1:8080") else {
