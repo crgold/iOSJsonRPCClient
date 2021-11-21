@@ -33,7 +33,7 @@ struct LocationDetails: Codable {
 
 class ViewModel: ObservableObject {
     @Published var locations: Locations?
-    var locationDetails : LocationDetails?
+    @Published var locationDetails : LocationDetails?
     
     func delete(index: Int) {
         guard let url = URL(string: "http://127.0.0.1:8080") else {
@@ -61,6 +61,10 @@ class ViewModel: ObservableObject {
         task.resume()
     }
     
+    func addLocation() {
+        
+    }
+    
     func getDetails(location: String) {
         guard let url = URL(string: "http://127.0.0.1:8080") else {
             return
@@ -85,7 +89,7 @@ class ViewModel: ObservableObject {
             do {
                 let locationDetails = try JSONDecoder().decode(LocationDetails.self, from: data)
                 DispatchQueue.main.async {
-                    print(locationDetails)
+                    self.locationDetails = locationDetails
                 }
             }
             catch {
