@@ -20,9 +20,9 @@ struct Details: Codable {
     var image: String
     var latitude: Float
     var name: String
-    var addressTitle: String
+    //var addressTitle: String
     var description: String
-    var addressStreet: String
+    //var addressStreet: String
     var category: String
     var longitude: Float
 }
@@ -138,16 +138,15 @@ struct LocationDetail: View {
     var body: some View {
         VStack {
             List{
-                Text("bob")
-                //Text("Image Value: " + (viewModel.locationDetails?.result.image ?? "") ?? "")
-                //Text(viewModel.locationDetails?.result.name ?? "")
+                Text("Image Value: " + (viewModel.locationDetails?.result.image ?? "") ?? "")
+                Text(viewModel.locationDetails?.result.name ?? "")
                 //Text(viewModel.locationDetails?.result.addressTitle ?? "")
-                //Text(viewModel.locationDetails?.result.description ?? "")
+                Text(viewModel.locationDetails?.result.description ?? "")
                 //Text(viewModel.locationDetails?.result.addressStreet ?? "")
-                //Text(viewModel.locationDetails?.result.category ?? "")
-                //Text("Elevation: \(viewModel.locationDetails?.result.elevation ?? tempFloat)")
-                //Text("Latitude: \(viewModel.locationDetails?.result.latitude ?? tempFloat)")
-                //Text("Longitude: \(viewModel.locationDetails?.result.longitude ?? tempFloat)")
+                Text(viewModel.locationDetails?.result.category ?? "")
+                Text("Elevation: \(viewModel.locationDetails?.result.elevation ?? tempFloat)")
+                Text("Latitude: \(viewModel.locationDetails?.result.latitude ?? tempFloat)")
+                Text("Longitude: \(viewModel.locationDetails?.result.longitude ?? tempFloat)")
             }
         }
                 .navigationBarTitle(location.description.uppercased())
