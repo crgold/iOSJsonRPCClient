@@ -15,17 +15,34 @@ struct Locations: Codable {
     }
 }
 
-struct LocationDetail: View {
-    var text: String
-    
-    var body: some View {
-        Text(text)
-            .navigationBarTitle(text.description.uppercased())
-    }
-}
-
 class ViewModel: ObservableObject {
     @Published var locations: Locations?
+    
+    func delete(index: Int) {
+        guard let url = URL(string: "http://127.0.0.1:8080") else {
+            return
+        }
+        
+        print(locations!.result[index])
+        
+        var request = URLRequest(url: url)
+        let json: [String: Any] = [
+            "jsonrpc": "2.0",
+            "method" : "remove",
+            "params" : [locations?.result[index]],
+            "id": 3
+        ]
+        
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.httpBody = try? JSONSerialization.data(withJSONObject: json)
+        let task = URLSession.shared.dataTask(with: request as URLRequest) { data, _, error in guard let _ = data, error == nil else {
+            return
+            }
+        }
+        task.resume()
+    }
     
     func getNames() {
         guard let url = URL(string: "http://127.0.0.1:8080") else {
@@ -61,19 +78,66 @@ class ViewModel: ObservableObject {
         }
         task.resume()
     }
+    
+    func getdetails() {
+        guard let url = URL(string: "http://127.0.0.1:8080") else {
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        let json: [String: Any] = [
+            "jsonrpc": "2.0",
+            "method" : "getName",
+            "params" : [],
+            "id": 3
+        ]
+        
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        request.httpBody = try? JSONSerialization.data(withJSONObject: json)
+        let task = URLSession.shared.dataTask(with: request as URLRequest) { [weak self] data, _, error in guard let data = data, error == nil else {
+            return
+            }
+            
+            do {
+                let locations = try JSONDecoder().decode(Locations.self, from: data)
+                DispatchQueue.main.async {
+                    
+                    self?.locations = locations
+                }
+            }
+            catch {
+                print(error)
+            }
+        }
+        task.resume()
+    }}
+
+struct LocationDetail: View {
+    var text: String
+    
+    
+    
+    var body: some View {
+        VStack {
+            Text(text)
+                .navigationBarTitle(text.description.uppercased())
+        }
+    }
 }
 
 struct ContentView: View {
     @ObservedObject var viewModel = ViewModel()
     
     var body: some View {
-        
         VStack {
             NavigationView {
                 List {
                     ForEach(viewModel.locations?.result ?? [""], id: \.self) { name in
                         NavigationLink(name, destination: LocationDetail(text: name))
                     }
+                    .onDelete(perform: delete)
                 }
                 .navigationBarTitle("Locations")
                 .onAppear {
@@ -84,6 +148,11 @@ struct ContentView: View {
                 Text("Add Location")
             }
         }
+    }
+    func delete(at offsets: IndexSet) {
+        //print(offsets.first!)
+        viewModel.delete(index: offsets.first!)
+        viewModel.locations!.result.remove(atOffsets: offsets)
     }
 }
 
