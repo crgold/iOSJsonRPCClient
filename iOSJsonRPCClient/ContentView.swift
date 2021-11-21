@@ -30,26 +30,51 @@ struct LocationDetail: View {
 }
 
 class ViewModel: ObservableObject {
+    @Published var locations: [Location] = []
     
     func fetch() {
         guard let url = URL(string: "http://127.0.0.1:8080") else {
             return
         }
         
-        let task = URLSession.shared.dataTask(with: url) { data, _, error in guard let data = data, error == nil else {
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let task = URLSession.shared.dataTask(with: request as URLRequest) { [weak self] data, _, error in guard let data = data, error == nil else {
             return
             }
+            
+            do {
+                let locations = try JSONDecoder().decode([Location].self, from: data)
+                DispatchQueue.main.async {
+                    self?.locations = locations
+                    print(self!.locations)
+                }
+            }
+            catch {
+                print(error)
+            }
         }
+        task.resume()
     }
 }
 
 struct ContentView: View {
+    var viewModel = ViewModel()
+    
     var body: some View {
         VStack {
             NavigationView {
                 List {
-                    NavigationLink("ASU",destination: LocationDetail(text: "ASU"))
+                    ForEach(viewModel.locations, id: \.self) { location in
+                        NavigationLink(location.name, destination: LocationDetail(text: location.name))
+                    }
                     .navigationBarTitle("Locations")
+                        .onAppear {
+                            self.viewModel.fetch()
+                    }
                 }
             }
             
