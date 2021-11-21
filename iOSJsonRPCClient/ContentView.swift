@@ -7,17 +7,8 @@
 
 import SwiftUI
 
-struct Location: Hashable, Codable {
-    let addressTitle: String
-    let addressStreet: String
-    let elevation: Float
-    let image: String
-    let latitude: Float
-    let longitude: Float
-    let name: String
-    let description: String
-    let category: String
-    let id: Int
+struct Locations: Codable {
+    let result: [String]
 }
 
 struct LocationDetail: View {
@@ -30,7 +21,7 @@ struct LocationDetail: View {
 }
 
 class ViewModel: ObservableObject {
-    @Published var locations: [Location] = []
+    @Published var locations: Locations?
     
     func fetch() {
         guard let url = URL(string: "http://127.0.0.1:8080") else {
@@ -54,7 +45,8 @@ class ViewModel: ObservableObject {
             }
             
             do {
-                let locations = try JSONDecoder().decode([Location].self, from: data)
+                let locations = try JSONDecoder().decode(Locations.self, from: data)
+                print(locations)
                 DispatchQueue.main.async {
                     self?.locations = locations
                     print(self!.locations)
@@ -75,8 +67,8 @@ struct ContentView: View {
         VStack {
             NavigationView {
                 List {
-                    ForEach(viewModel.locations, id: \.self) { location in
-                        NavigationLink(location.name, destination: LocationDetail(text: location.name))
+                    ForEach(viewModel.locations!.result, id: \.self) { name in
+                        NavigationLink(name, destination: LocationDetail(text: name))
                     }
                 }
                 .navigationBarTitle("Locations")
