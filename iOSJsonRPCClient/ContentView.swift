@@ -7,19 +7,30 @@
 
 import SwiftUI
 
+struct LocationDetail: View {
+    var text: String
+    
+    var body: some View {
+        Text(text)
+            .navigationBarTitle(text.description.uppercased())
+    }
+}
+
 struct ContentView: View {
     var body: some View {
-        VStack {
-            NavigationView {
-                List {
-                    NavigationLink(destination: /*@START_MENU_TOKEN@*/ /*@PLACEHOLDER=Destination@*/Text("Destination")/*@END_MENU_TOKEN@*/) {
-                        /*@START_MENU_TOKEN@*/ /*@PLACEHOLDER=Label Content@*/Text("Navigate")/*@END_MENU_TOKEN@*/
+        NavigationView {
+            List {
+                NavigationLink("ASU",destination: LocationDetail(text: "ASU"))
+                .navigationBarTitle("Locations")
+                .toolbar {
+                    ToolbarItem(placement: .bottomBar) {
+                            Button(action: {
+                                
+                            }, label: {
+                                Text("Soem Button")
+                                })
                     }
-                    .navigationBarTitle("Locations")
                 }
-            }
-            Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/) {
-                Text("Add Location")
             }
         }
     }
