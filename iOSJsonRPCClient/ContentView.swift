@@ -72,7 +72,14 @@ class ViewModel: ObservableObject {
             "category": cat
         ]*/
         
-        struct Location: Codable {
+        struct LocationJSON: Encodable {
+            var jsonrpc: String
+            var method: String
+            var params: [Location]
+            var id: Int
+        }
+        
+        struct Location: Encodable {
             var addressTitle: String
             var addressStreet: String
             var elevation: Double
@@ -82,11 +89,6 @@ class ViewModel: ObservableObject {
             var name: String
             var description: String
             var category: String
-            
-            enum CodingKeys: String, CodingKey {
-                case addressTitle = "address-title"
-                case addressStreet = "address-street"
-            }
         }
         
         let location = Location(
@@ -101,25 +103,27 @@ class ViewModel: ObservableObject {
             category: cat
         )
         
-        let data = try? JSONEncoder().encode(location)
-        print(data as Any)
+        let json = LocationJSON(jsonrpc: "2.0", method: "add", params: [location], id: 3)
+        print(json)
+        
+        let data = try? JSONEncoder().encode(json)
         
         guard let url = URL(string: "http://127.0.0.1:8080") else {
                 return
             }
             
             var request = URLRequest(url: url)
-            let json: [String: Any] = [
+            /*let json: [String: Any] = [
                 "jsonrpc": "2.0",
                 "method" : "add",
                 "params" : [data],
                 "id": 3
-            ]
+            ]*/
             
             request.httpMethod = "POST"
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
             request.setValue("application/json", forHTTPHeaderField: "Accept")
-            request.httpBody = try? JSONSerialization.data(withJSONObject: json)
+            request.httpBody = data
             let task = URLSession.shared.dataTask(with: request as URLRequest) { data, _, error in guard let _ = data, error == nil else {
                 return
                 }
@@ -240,7 +244,7 @@ struct ContentView: View {
                 }
             }
             Button("Add Location", action: {
-                viewModel.addLocation(
+                self.viewModel.addLocation(
                     addressTitle: "cebu",
                     addressStreet: "515 some road",
                     elevation: 101.5,
