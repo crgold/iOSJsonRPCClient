@@ -101,6 +101,8 @@ class ViewModel: ObservableObject {
             category: cat
         )
         
+        let data = try? JSONEncoder().encode(location)
+        
         guard let url = URL(string: "http://127.0.0.1:8080") else {
                 return
             }
@@ -109,7 +111,7 @@ class ViewModel: ObservableObject {
             let json: [String: Any] = [
                 "jsonrpc": "2.0",
                 "method" : "add",
-                "params" : [json],
+                "params" : [data],
                 "id": 3
             ]
             
