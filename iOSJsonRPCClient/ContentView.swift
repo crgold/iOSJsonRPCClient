@@ -60,17 +60,6 @@ class ViewModel: ObservableObject {
     }
     
     func addLocation(addressTitle: String, addressStreet: String, elevation: Double, image: String, lat: Double, lng: Double, name: String, desc: String, cat: String) {
-        /*let input: [String: Any] = [
-            "address-title": addressTitle,
-            "address-street": addressStreet,
-            "elevation": elevation,
-            "image": image,
-            "latitude": lat,
-            "longitude" : lng,
-            "name": name,
-            "description": desc,
-            "category": cat
-        ]*/
         
         struct LocationJSON: Encodable {
             var jsonrpc: String
@@ -113,12 +102,6 @@ class ViewModel: ObservableObject {
             }
             
             var request = URLRequest(url: url)
-            /*let json: [String: Any] = [
-                "jsonrpc": "2.0",
-                "method" : "add",
-                "params" : [data],
-                "id": 3
-            ]*/
             
             request.httpMethod = "POST"
             request.setValue("application/json", forHTTPHeaderField: "Content-Type")
