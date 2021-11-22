@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct AddLocation: View {
+    @State var image: String = ""
     @State var name: String = ""
     @State var addressTitle: String = ""
     @State var description: String = ""
@@ -27,6 +28,7 @@ struct AddLocation: View {
     var body: some View {
         NavigationView {
             Form {
+                TextField("Image Text", text: $image)
                 TextField("Location Name", text: $name)
                 TextField("Address Title", text: $addressTitle)
                 TextField("Description", text: $description)
@@ -52,7 +54,18 @@ struct AddLocation: View {
                     TextField("", value: $longitude, formatter: formatter)
                     .fixedSize()
                     .keyboardType(.decimalPad)
-                }            }
+                }
+                Section {
+                    HStack {
+                        Spacer()
+                        Button("Add Location", action: {})
+                        Spacer()
+                        Button("Cancel", action: {})
+                            .foregroundColor(.red)
+                        Spacer()
+                    }
+                }
+            }
             .navigationBarTitle("Add New Location")
         }
     }
