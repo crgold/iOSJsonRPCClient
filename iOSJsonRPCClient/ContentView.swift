@@ -7,8 +7,26 @@
 
 import SwiftUI
 
+struct ViewManager: View {
+    @State var showHome: Bool = true
+    
+    var body: some View {
+        return Group {
+            if showHome {
+                ContentView(showHome: $showHome)
+            }
+            else {
+                AddLocation(showHome: $showHome)
+            }
+        }
+    }
+}
+
 struct AddLocation: View {
     @ObservedObject var viewModel = ViewModel()
+    
+    @Binding var showHome: Bool
+    
     @State var image: String = ""
     @State var name: String = ""
     @State var addressTitle: String = ""
@@ -111,6 +129,7 @@ struct LocationDetail: View {
 
 struct ContentView: View {
     @ObservedObject var viewModel = ViewModel()
+    @Binding var showHome: Bool
     
     var body: some View {
         VStack {
@@ -120,7 +139,7 @@ struct ContentView: View {
                         NavigationLink(name, destination: LocationDetail(location: name))
                     }
                     .onDelete(perform: delete)
-                    NavigationLink("Add Location", destination: AddLocation())
+                    NavigationLink("Add Location", destination: AddLocation(showHome: $showHome))
                 }
                 .navigationBarTitle("Locations")
             
@@ -128,8 +147,7 @@ struct ContentView: View {
                     self.viewModel.getNames()
                 }
             }
-            Button("Add Location", action: {}
-            )
+            Button("Add Location", action: {self.showHome = false})
         }
     }
     func delete(at offsets: IndexSet) {
