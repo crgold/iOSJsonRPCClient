@@ -20,9 +20,9 @@ struct Details: Codable {
     var image: String
     var latitude: Float
     var name: String
-    //var addressTitle: String
+    var addressTitle: String
     var description: String
-    //var addressStreet: String
+    var addressStreet: String
     var category: String
     var longitude: Float
 }
