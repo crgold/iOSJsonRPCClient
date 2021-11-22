@@ -7,6 +7,18 @@
 
 import SwiftUI
 
+struct AddLocation: View {
+    @State var name: String = ""
+    
+    var body: some View {
+        NavigationView {
+            Form {
+                TextField("Name", text: $name)
+            }
+        }
+    }
+}
+
 struct LocationDetail: View {
     var location: String
     var tempFloat: Float = 0.0
@@ -43,6 +55,7 @@ struct ContentView: View {
                     ForEach(viewModel.locations?.result ?? [""], id: \.self) { name in
                         NavigationLink(name, destination: LocationDetail(location: name))
                     }
+                    NavigationLink("Add Location", destination: AddLocation())
                     .onDelete(perform: delete)
                 }
                 .navigationBarTitle("Locations")
