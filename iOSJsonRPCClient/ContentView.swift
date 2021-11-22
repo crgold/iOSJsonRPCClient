@@ -89,6 +89,18 @@ class ViewModel: ObservableObject {
             }
         }
         
+        var location = Location(
+            addressTitle: addressTitle,
+            addressStreet: addressStreet,
+            elevation: elevation,
+            image: image,
+            latitude: lat,
+            longitude: lng,
+            name: name,
+            description: desc,
+            category: cat
+        )
+        
         guard let url = URL(string: "http://127.0.0.1:8080") else {
                 return
             }
@@ -110,7 +122,7 @@ class ViewModel: ObservableObject {
                 }
             }
             task.resume()
-        }    
+        }
     
     func getDetails(location: String) {
         guard let url = URL(string: "http://127.0.0.1:8080") else {
