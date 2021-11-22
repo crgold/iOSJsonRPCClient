@@ -20,6 +20,7 @@ struct AddLocation: View {
     let formatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
+        
         return formatter
     }()
 
@@ -31,18 +32,28 @@ struct AddLocation: View {
                 TextField("Description", text: $description)
                 TextField("Street Address", text: $addressStreet)
                 TextField("Category", text: $category)
-                TextField("Elevation", value: $elevation, formatter: formatter)
+                HStack {
+                    Text("Elevation:")
+                    Spacer()
+                    TextField("", value: $elevation, formatter: formatter)
+                    .fixedSize()
                     .keyboardType(.decimalPad)
-                TextField("Location Name", value: $elevation, formatter: formatter)
+                }
+                HStack {
+                    Text("Latitude:")
+                    Spacer()
+                    TextField("", value: $latitude, formatter: formatter)
+                    .fixedSize()
                     .keyboardType(.decimalPad)
-                TextField("Address Title", value: $elevation, formatter: formatter)
+                }
+                HStack {
+                    Text("Longitude:")
+                    Spacer()
+                    TextField("", value: $longitude, formatter: formatter)
+                    .fixedSize()
                     .keyboardType(.decimalPad)
-                
-                
-                
-                
-            }
-        .navigationBarTitle("Add New Location")
+                }            }
+            .navigationBarTitle("Add New Location")
         }
     }
 }
