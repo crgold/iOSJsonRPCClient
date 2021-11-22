@@ -60,7 +60,7 @@ class ViewModel: ObservableObject {
     }
     
     func addLocation(addressTitle: String, addressStreet: String, elevation: Float, image: String, lat: Float, lng: Float, name: String, desc: String, cat: String) {
-        let json = {
+        /*let json = {
             "address-title": addressTitle,
             "address-street": addressStreet,
             "elevation": elevation,
@@ -70,6 +70,22 @@ class ViewModel: ObservableObject {
             "name": name,
             "description": desc,
             "category": cat
+        }*/
+        
+        struct Location: Codable {
+            var addressTitle: String
+            var addressStreet: String
+            "elevation": elevation,
+            "image": image,
+            "latitude": lat,
+            "longitude" : lng,
+            "name": name,
+            "description": desc,
+            "category": cat
+            
+            enum CodingKeys: String, CodingKey {
+                case addressTitle = "address-title"
+                case addressStreet = "address-street"
         }
         
         guard let url = URL(string: "http://127.0.0.1:8080") else {
