@@ -72,20 +72,21 @@ class ViewModel: ObservableObject {
             "category": cat
         }*/
         
-        struct Location: Codable {
+        struct Location: Encodable {
             var addressTitle: String
             var addressStreet: String
-            "elevation": elevation,
-            "image": image,
-            "latitude": lat,
-            "longitude" : lng,
-            "name": name,
-            "description": desc,
-            "category": cat
+            var elevation: Float
+            var image: String
+            var latitude: Float
+            var longitude: Float
+            var name: String
+            var description: String
+            var category: String
             
             enum CodingKeys: String, CodingKey {
                 case addressTitle = "address-title"
                 case addressStreet = "address-street"
+            }
         }
         
         guard let url = URL(string: "http://127.0.0.1:8080") else {
@@ -109,7 +110,7 @@ class ViewModel: ObservableObject {
                 }
             }
             task.resume()
-        }    }
+        }    
     
     func getDetails(location: String) {
         guard let url = URL(string: "http://127.0.0.1:8080") else {
