@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct AddLocation: View {
+    @ObservedObject var viewModel = ViewModel()
     @State var image: String = ""
     @State var name: String = ""
     @State var addressTitle: String = ""
@@ -58,7 +59,18 @@ struct AddLocation: View {
                 Section {
                     HStack {
                         Spacer()
-                        Button("Add Location", action: {})
+                        Button("Add Location", action: {
+                            self.viewModel.addLocation(
+                            addressTitle: self.addressTitle,
+                            addressStreet: self.addressStreet,
+                            elevation: self.elevation,
+                            image: self.image,
+                            lat: self.latitude,
+                            lng: self.longitude,
+                            name: self.name,
+                            desc: self.description,
+                            cat: self.category
+                            )                        })
                         Spacer()
                         Button("Cancel", action: {})
                             .foregroundColor(.red)
@@ -116,19 +128,7 @@ struct ContentView: View {
                     self.viewModel.getNames()
                 }
             }
-            Button("Add Location", action: {
-                self.viewModel.addLocation(
-                    addressTitle: "cebu",
-                    addressStreet: "515 some road",
-                    elevation: 101.5,
-                    image: "Some Image",
-                    lat: 15.2,
-                    lng: 42.9,
-                    name: "Philippines",
-                    desc: "a lovely place indeed",
-                    cat: "island"
-                    )
-                }
+            Button("Add Location", action: {}
             )
         }
     }
