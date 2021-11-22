@@ -59,8 +59,8 @@ class ViewModel: ObservableObject {
         task.resume()
     }
     
-    func addLocation(addressTitle: String, addressStreet: String, elevation: Float, image: String, lat: Float, lng: Float, name: String, desc: String, cat: String) {
-        /*let json = {
+    func addLocation(addressTitle: String, addressStreet: String, elevation: Double, image: String, lat: Double, lng: Double, name: String, desc: String, cat: String) {
+        /*let input: [String: Any] = [
             "address-title": addressTitle,
             "address-street": addressStreet,
             "elevation": elevation,
@@ -70,15 +70,15 @@ class ViewModel: ObservableObject {
             "name": name,
             "description": desc,
             "category": cat
-        }*/
+        ]*/
         
-        struct Location: Encodable {
+        struct Location: Codable {
             var addressTitle: String
             var addressStreet: String
-            var elevation: Float
+            var elevation: Double
             var image: String
-            var latitude: Float
-            var longitude: Float
+            var latitude: Double
+            var longitude: Double
             var name: String
             var description: String
             var category: String
@@ -102,6 +102,7 @@ class ViewModel: ObservableObject {
         )
         
         let data = try? JSONEncoder().encode(location)
+        print(data as Any)
         
         guard let url = URL(string: "http://127.0.0.1:8080") else {
                 return
