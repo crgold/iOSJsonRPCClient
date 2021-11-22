@@ -89,7 +89,7 @@ class ViewModel: ObservableObject {
             }
         }
         
-        var location = Location(
+        let location = Location(
             addressTitle: addressTitle,
             addressStreet: addressStreet,
             elevation: elevation,
@@ -203,7 +203,7 @@ struct LocationDetail: View {
     var body: some View {
         VStack {
             List{
-                Text("Image Value: " + (viewModel.locationDetails?.result.image ?? "") ?? "")
+                Text("Image Value: " + (viewModel.locationDetails?.result.image ?? "") )
                 Text(viewModel.locationDetails?.result.name ?? "")
                 //Text(viewModel.locationDetails?.result.addressTitle ?? "")
                 Text(viewModel.locationDetails?.result.description ?? "")
@@ -238,9 +238,20 @@ struct ContentView: View {
                     self.viewModel.getNames()
                 }
             }
-            Button(action: /*@START_MENU_TOKEN@*/{}/*@END_MENU_TOKEN@*/) {
-                Text("Add Location")
-            }
+            Button("Add Location", action: {
+                viewModel.addLocation(
+                    addressTitle: "cebu",
+                    addressStreet: "515 some road",
+                    elevation: 101.5,
+                    image: "Some Image",
+                    lat: 15.2,
+                    lng: 42.9,
+                    name: "Philippines",
+                    desc: "a lovely place indeed",
+                    cat: "island"
+                    )
+                }
+            )
         }
     }
     func delete(at offsets: IndexSet) {
