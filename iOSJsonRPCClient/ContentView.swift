@@ -55,8 +55,8 @@ struct ContentView: View {
                     ForEach(viewModel.locations?.result ?? [""], id: \.self) { name in
                         NavigationLink(name, destination: LocationDetail(location: name))
                     }
-                    NavigationLink("Add Location", destination: AddLocation())
                     .onDelete(perform: delete)
+                    NavigationLink("Add Location", destination: AddLocation())
                 }
                 .navigationBarTitle("Locations")
                 .onAppear {
