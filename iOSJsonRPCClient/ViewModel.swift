@@ -16,15 +16,20 @@ struct Locations: Codable {
 }
 
 struct Details: Codable {
-    var elevation: Float
+    var elevation: Double
     var image: String
-    var latitude: Float
+    var latitude: Double
     var name: String
     var addressTitle: String
     var description: String
     var addressStreet: String
     var category: String
-    var longitude: Float
+    var longitude: Double
+    
+    enum CodingKeys: String, CodingKey {
+        case addressTitle = "address-title"
+        case addressStreet = "address-street"
+    }
 }
 
 struct LocationDetails: Codable {

@@ -11,14 +11,6 @@ struct ViewManager: View {
     @State var showHome: Bool = true
     
     var body: some View {
-        /*return Group {
-            if showHome {
-                ContentView(showHome: $showHome)
-            }
-            else {
-                AddLocation(showHome: $showHome)
-            }
-        }*/
         TabView {
             ContentView()
                 .tabItem {
@@ -32,14 +24,14 @@ struct ViewManager: View {
                     VStack{
                         Image(systemName: "plus")
                         Text("Add Location")
-                    }                }
+                    }
+                }
         }
     }
 }
 
 struct AddLocation: View {
     @ObservedObject var viewModel = ViewModel()
-    //@Binding var showHome: Bool
     
     @State var image: String = ""
     @State var name: String = ""
@@ -67,6 +59,7 @@ struct AddLocation: View {
                 TextField("Description", text: $description)
                 TextField("Street Address", text: $addressStreet)
                 TextField("Category", text: $category)
+
                 HStack {
                     Text("Elevation:")
                     Spacer()
@@ -143,7 +136,6 @@ struct LocationDetail: View {
 
 struct ContentView: View {
     @ObservedObject var viewModel = ViewModel()
-    //@Binding var showHome: Bool
     
     var body: some View {
         VStack {
@@ -153,7 +145,6 @@ struct ContentView: View {
                         NavigationLink(name, destination: LocationDetail(location: name))
                     }
                     .onDelete(perform: delete)
-                    //NavigationLink("Add Location", destination: AddLocation(showHome: $showHome))
                 }
                 .navigationBarTitle("Locations")
             
@@ -161,11 +152,9 @@ struct ContentView: View {
                     self.viewModel.getNames()
                 }
             }
-            //Button("Add Location", action: {self.showHome = false})
         }
     }
     func delete(at offsets: IndexSet) {
-        //print(offsets.first!)
         viewModel.delete(index: offsets.first!)
         viewModel.locations!.result.remove(atOffsets: offsets)
     }
