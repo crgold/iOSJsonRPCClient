@@ -27,8 +27,15 @@ struct Details: Codable {
     var longitude: Double
     
     enum CodingKeys: String, CodingKey {
+        case elevation
+        case image
+        case latitude
+        case name
         case addressTitle = "address-title"
+        case description
         case addressStreet = "address-street"
+        case category
+        case longitude
     }
 }
 

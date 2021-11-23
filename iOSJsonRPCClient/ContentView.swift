@@ -1,9 +1,31 @@
-//
-//  ContentView.swift
-//  iOSJsonRPCClient
-//
-//  Created by  on 11/20/21.
-//
+/*
+ * ContentView.swift
+ * iOSJsonRPCClient
+ *
+ * Created by Christopher Gold on 11/20/21.
+ *
+ *
+ * Copyright 2020 Christopher Gold,
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Purpose: Example Swift Client for a Java student collection JsonRPC server.
+ *
+ * Ser423 Mobile Applications
+ * see http://pooh.poly.asu.edu/Mobile
+ * @author Christopher Gold crgold@asu.edu
+ * @version November, 26, 2021
+ */
 
 import SwiftUI
 
@@ -95,9 +117,10 @@ struct AddLocation: View {
                             name: self.name,
                             desc: self.description,
                             cat: self.category
-                            )                        })
+                            )
+                      })
                         Spacer()
-                        Button("Cancel", action: {})
+                        Button("Cancel", action: {} )
                             .foregroundColor(.red)
                         Spacer()
                     }
@@ -110,7 +133,7 @@ struct AddLocation: View {
 
 struct LocationDetail: View {
     var location: String
-    var tempFloat: Float = 0.0
+    var tempDbl: Double = 0.0
     @ObservedObject var viewModel = ViewModel()
     
     var body: some View {
@@ -122,9 +145,9 @@ struct LocationDetail: View {
                 Text(viewModel.locationDetails?.result.description ?? "")
                 Text(viewModel.locationDetails?.result.addressStreet ?? "")
                 Text(viewModel.locationDetails?.result.category ?? "")
-                Text("Elevation: \(viewModel.locationDetails?.result.elevation ?? tempFloat)")
-                Text("Latitude: \(viewModel.locationDetails?.result.latitude ?? tempFloat)")
-                Text("Longitude: \(viewModel.locationDetails?.result.longitude ?? tempFloat)")
+                Text("Elevation: \(viewModel.locationDetails?.result.elevation ?? tempDbl)")
+                Text("Latitude: \(viewModel.locationDetails?.result.latitude ?? tempDbl)")
+                Text("Longitude: \(viewModel.locationDetails?.result.longitude ?? tempDbl)")
             }
         }
         .navigationBarTitle(location.description.uppercased())
