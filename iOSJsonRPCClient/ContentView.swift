@@ -22,7 +22,7 @@
  * Purpose: Example Swift Client for a Java student collection JsonRPC server.
  *
  * Ser423 Mobile Applications
- * see http://pooh.poly.asu.edu/Mobile
+ * 
  * @author Christopher Gold crgold@asu.edu
  * @version November, 26, 2021
  */
